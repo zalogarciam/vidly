@@ -1,8 +1,15 @@
 import React, { Component } from "react";
-import { getMovies } from "../services/fakeMovieService";
+import { getMovies, deleteMovie } from "../services/fakeMovieService";
 
 class Movie extends Component {
   state = { movies: getMovies() };
+
+  handleDelete = (movie) => {
+    deleteMovie(movie._id);
+    const movies = this.state.movies.filter((m) => m._id !== movie._id);
+    this.setState({ movies });
+  };
+
   render() {
     return (
       <table className="table">
@@ -12,6 +19,7 @@ class Movie extends Component {
             <th scope="col">Genre</th>
             <th scope="col">Number In Stock</th>
             <th scope="col">Daily Rental Rate</th>
+            <th scope="col">Option</th>
           </tr>
         </thead>
         <tbody>
@@ -21,6 +29,14 @@ class Movie extends Component {
               <td>{movie.genre.name}</td>
               <td>{movie.numberInStock}</td>
               <td>{movie.dailyRentalRate}</td>
+              <td>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => this.handleDelete(movie)}
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
