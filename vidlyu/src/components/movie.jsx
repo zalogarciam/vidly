@@ -3,6 +3,7 @@ import { getMovies, deleteMovie } from "../services/fakeMovieService";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
+import ListGroup from "./common/listGroup";
 
 class Movie extends Component {
   state = {
@@ -37,6 +38,7 @@ class Movie extends Component {
 
     return (
       <div className="body">
+        <ListGroup></ListGroup>
         <p> Showing {count} movies in the database</p>
         <table className="table">
           <thead>
