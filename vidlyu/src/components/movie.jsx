@@ -75,8 +75,6 @@ class Movie extends Component {
           <div className="col-3">
             <ListGroup
               genres={allGenres}
-              textProperty = "name"
-              valueProperty = "_id"
               currentGenre={currentGenre}
               onItemSelect={this.handleGenreSelect}
             ></ListGroup>
