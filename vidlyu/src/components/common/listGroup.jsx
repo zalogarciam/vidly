@@ -3,7 +3,7 @@ import React, { Component } from "react";
 const ListGroup = (props) => {
   const { items, textProperty, valueProperty, selectedItem, onItemSelect } =
     props;
-
+  console.log(selectedItem);
   return (
     <div className="list-group">
       {items.map((genre) => (

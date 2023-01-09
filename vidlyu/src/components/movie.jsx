@@ -5,21 +5,22 @@ import Like from "./common/like";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
+import { filter } from "lodash";
 
 class Movie extends Component {
-  allGenres = { _id: -1, name: "All Genres" };
   state = {
     movies: [],
     pageSize: 4,
     currentPage: 1,
-    selectedGenre: this.allGenres,
+    selectedGenre: true,
     genres: [],
   };
 
   componentDidMount() {
+    const genres = [{ name: "All Genres" }, ...getGenres()];
     this.setState({
       movies: getMovies(),
-      genres: getGenres(),
+      genres: genres,
     });
   }
 
@@ -41,7 +42,7 @@ class Movie extends Component {
   };
 
   handleGenreSelect = (genre) => {
-    this.setState({ currentGenre: genre });
+    this.setState({ selectedGenre: genre, currentPage: 1 });
   };
 
   render() {
@@ -57,17 +58,11 @@ class Movie extends Component {
 
     if (count == 0) return <p>There are no movies in the database</p>;
 
-    let filteredMovies = null;
-    let movies = null;
-    if (selectedGenre.name !== "All Genres") {
-      filteredMovies = allMovies.filter(
-        (m) => m.genre.name === selectedGenre.name
-      );
-      movies = paginate(filteredMovies, currentPage, pageSize);
-      count = movies.length;
-    } else {
-      movies = paginate(allMovies, currentPage, pageSize);
-    }
+    const filtered =
+      selectedGenre && selectedGenre._id
+        ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
+        : allMovies;
+    const movies = paginate(filtered, currentPage, pageSize);
 
     return (
       <div className="body container">
@@ -80,7 +75,7 @@ class Movie extends Component {
             ></ListGroup>
           </div>
           <div className="col-9">
-            <p> Showing {count} movies in the database</p>
+            <p> Showing {filtered.length} movies in the database</p>
             <table className="table">
               <thead>
                 <tr>
@@ -118,7 +113,7 @@ class Movie extends Component {
               </tbody>
             </table>
             <Pagination
-              itemsCount={count}
+              itemsCount={filtered.length}
               pageSize={pageSize}
               currentPage={currentPage}
               onPageChange={this.handlePageChange}
