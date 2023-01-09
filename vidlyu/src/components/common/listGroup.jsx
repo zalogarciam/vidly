@@ -1,31 +1,26 @@
 import React, { Component } from "react";
 
-class ListGroup extends Component {
-  render() {
-    return (
-      <div class="list-group">
+const ListGroup = (props) => {
+  const { genres, currentGenre, onGenreChange } = props;
+
+  return (
+    <div className="list-group">
+      {genres.map((genre) => (
         <a
+          key={genre._id}
           href="#"
-          class="list-group-item list-group-item-action active"
-          aria-current="true"
+          className={
+            genre !== currentGenre
+              ? "list-group-item list-group-item-action"
+              : "list-group-item list-group-item-action active"
+          }
+          onClick={() => onGenreChange(genre)}
         >
-          The current link item
+          {genre.name}
         </a>
-        <a href="#" class="list-group-item list-group-item-action">
-          A second link item
-        </a>
-        <a href="#" class="list-group-item list-group-item-action">
-          A third link item
-        </a>
-        <a href="#" class="list-group-item list-group-item-action">
-          A fourth link item
-        </a>
-        <a class="list-group-item list-group-item-action disabled">
-          A disabled link item
-        </a>
-      </div>
-    );
-  }
-}
+      ))}
+    </div>
+  );
+};
 
 export default ListGroup;
