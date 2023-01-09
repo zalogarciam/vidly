@@ -1,15 +1,19 @@
 import React, { Component, Fragment } from "react";
 import { getMovies, deleteMovie } from "../services/fakeMovieService";
+import { getGenres } from "../services/fakeGenreService";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
 
 class Movie extends Component {
+  allGenres = { _id: -1, name: "All Genres" };
   state = {
     movies: getMovies(),
     pageSize: 4,
     currentPage: 1,
+    currentGenre: this.allGenres,
+    genres: [this.allGenres, ...getGenres()],
   };
 
   handleDelete = (movie) => {
@@ -29,18 +33,44 @@ class Movie extends Component {
     this.setState({ currentPage: page });
   };
 
+  handleGenreChange = (genre) => {
+    this.setState({ currentGenre: genre });
+  };
+
   render() {
-    const { length: count } = this.state.movies;
-    const { pageSize, currentPage, movies: allMovies } = this.state;
+    let { length: count } = this.state.movies;
+    const { length: genresCount } = this.state.genres;
+    const {
+      pageSize,
+      currentPage,
+      movies: allMovies,
+      currentGenre,
+      genres: allGenres,
+    } = this.state;
+
     if (count == 0) return <p>There are no movies in the database</p>;
 
-    const movies = paginate(allMovies, currentPage, pageSize);
+    let filteredMovies = null;
+    let movies = null;
+    if (currentGenre.name !== "All Genres") {
+      filteredMovies = allMovies.filter(
+        (m) => m.genre.name === currentGenre.name
+      );
+      movies = paginate(filteredMovies, currentPage, pageSize);
+      count = movies.length;
+    } else {
+      movies = paginate(allMovies, currentPage, pageSize);
+    }
 
     return (
       <div className="body container">
         <div className="row">
           <div className="col-3">
-            <ListGroup></ListGroup>
+            <ListGroup
+              genres={allGenres}
+              currentGenre={currentGenre}
+              onGenreChange={this.handleGenreChange}
+            ></ListGroup>
           </div>
           <div className="col-9">
             <p> Showing {count} movies in the database</p>
