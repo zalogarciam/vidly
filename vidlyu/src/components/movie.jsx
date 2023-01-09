@@ -12,7 +12,7 @@ class Movie extends Component {
     movies: [],
     pageSize: 4,
     currentPage: 1,
-    currentGenre: this.allGenres,
+    selectedGenre: this.allGenres,
     genres: [],
   };
 
@@ -51,7 +51,7 @@ class Movie extends Component {
       pageSize,
       currentPage,
       movies: allMovies,
-      currentGenre,
+      selectedGenre,
       genres: allGenres,
     } = this.state;
 
@@ -59,9 +59,9 @@ class Movie extends Component {
 
     let filteredMovies = null;
     let movies = null;
-    if (currentGenre.name !== "All Genres") {
+    if (selectedGenre.name !== "All Genres") {
       filteredMovies = allMovies.filter(
-        (m) => m.genre.name === currentGenre.name
+        (m) => m.genre.name === selectedGenre.name
       );
       movies = paginate(filteredMovies, currentPage, pageSize);
       count = movies.length;
@@ -74,8 +74,8 @@ class Movie extends Component {
         <div className="row">
           <div className="col-3">
             <ListGroup
-              genres={allGenres}
-              currentGenre={currentGenre}
+              items={allGenres}
+              selectedItem={selectedGenre}
               onItemSelect={this.handleGenreSelect}
             ></ListGroup>
           </div>

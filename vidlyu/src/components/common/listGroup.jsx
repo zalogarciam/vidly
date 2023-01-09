@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 
 const ListGroup = (props) => {
-  const { genres, textProperty, valueProperty, currentGenre, onItemSelect } =
+  const { items, textProperty, valueProperty, selectedItem, onItemSelect } =
     props;
 
   return (
     <div className="list-group">
-      {genres.map((genre) => (
+      {items.map((genre) => (
         <a
           key={genre[valueProperty]}
           href="#"
           className={
-            genre !== currentGenre
+            genre !== selectedItem
               ? "list-group-item list-group-item-action"
               : "list-group-item list-group-item-action active"
           }
