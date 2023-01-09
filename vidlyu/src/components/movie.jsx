@@ -9,12 +9,19 @@ import ListGroup from "./common/listGroup";
 class Movie extends Component {
   allGenres = { _id: -1, name: "All Genres" };
   state = {
-    movies: getMovies(),
+    movies: [],
     pageSize: 4,
     currentPage: 1,
     currentGenre: this.allGenres,
-    genres: [this.allGenres, ...getGenres()],
+    genres: [],
   };
+
+  componentDidMount() {
+    this.setState({
+      movies: getMovies(),
+      genres: getGenres(),
+    });
+  }
 
   handleDelete = (movie) => {
     deleteMovie(movie._id);
@@ -33,7 +40,7 @@ class Movie extends Component {
     this.setState({ currentPage: page });
   };
 
-  handleGenreChange = (genre) => {
+  handleGenreSelect = (genre) => {
     this.setState({ currentGenre: genre });
   };
 
@@ -68,8 +75,10 @@ class Movie extends Component {
           <div className="col-3">
             <ListGroup
               genres={allGenres}
+              textProperty = "name"
+              valueProperty = "_id"
               currentGenre={currentGenre}
-              onGenreChange={this.handleGenreChange}
+              onItemSelect={this.handleGenreSelect}
             ></ListGroup>
           </div>
           <div className="col-9">
