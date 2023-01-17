@@ -1,9 +1,10 @@
 import "./App.css";
 import Movie from "./components/movie";
 import NavBar from "./components/navBar";
-import { Route, Routes, Switch } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Customer from "./components/customer";
 import Rental from "./components/rental";
+import NotFound from "./components/notFound";
 
 function App() {
   return (
@@ -15,7 +16,9 @@ function App() {
             <Route path="/movies" element={<Movie />}></Route>
             <Route path="/customers" element={<Customer />}></Route>
             <Route path="/rentals" element={<Rental />}></Route>
-            <Route path="/" element={<Movie />}></Route>
+            <Route path="/not-found" element={<NotFound />}></Route>
+            <Route path="*" element={<NotFound />} />
+            <Route path="/" element={<Navigate to="/movies" />} />
           </Routes>
         </div>
       </div>
