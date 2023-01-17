@@ -1,12 +1,12 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-light">
       <div className="container-fluid">
-        <NavLink className="navbar-brand" to="/">
+        <Link className="navbar-brand" vto="/">
           Vidly
-        </NavLink>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
