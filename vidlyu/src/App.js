@@ -1,12 +1,13 @@
 import { Route, Routes, Navigate } from "react-router-dom";
+import { Fragment } from "react";
 import Movie from "./components/movie";
 import NavBar from "./components/navBar";
 import Customer from "./components/customer";
 import Rental from "./components/rental";
 import NotFound from "./components/notFound";
-import "./App.css";
-import { Fragment } from "react";
 import MovieForm from "./components/movieForm";
+import LoginForm from "./components/loginForm";
+import "./App.css";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <NavBar></NavBar>
       <main className="container">
         <Routes>
+          <Route path="/login" element={<LoginForm></LoginForm>}></Route>
           <Route path="/movies/:id" element={<MovieForm></MovieForm>}></Route>
           <Route path="/movies" element={<Movie />}></Route>
           <Route path="/customers" element={<Customer />}></Route>
