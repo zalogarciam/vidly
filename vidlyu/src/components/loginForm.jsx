@@ -30,7 +30,6 @@ class LoginForm extends Component {
     e.preventDefault();
 
     const errors = this.validate();
-    console.log(errors);
     this.setState({ errors: errors || {} });
     if (errors) return;
     // Call the server
@@ -38,10 +37,27 @@ class LoginForm extends Component {
     console.log("Submitted");
   };
 
+  validateProperty = ({name, value}) => {
+    if (name === 'username') {
+      if (value.trim() === '') return 'Username is required';
+      // ...
+    }
+
+    if (name === 'password') {
+      if (value.trim() === '') return 'Password is required';
+      // ...
+    }
+  }
+
   handleChange = ({ target: input }) => {
+    const errors = {...this.state.errors}
+    const errorMessage = this.validateProperty(input)
+    if (errorMessage) errors[input.name] = errorMessage
+    else delete errors[input.name]
+
     const account = { ...this.state.account };
     account[input.id] = input.value;
-    this.setState({ account });
+    this.setState({ account, errors });
   };
 
   render() {
