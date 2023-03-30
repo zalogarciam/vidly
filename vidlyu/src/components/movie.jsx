@@ -6,6 +6,7 @@ import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
 import _ from "lodash";
 import MoviesTable from "./moviesTable";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 class Movie extends Component {
   state = {
@@ -69,11 +70,13 @@ class Movie extends Component {
     return { totalCount: filtered.length, data: movies };
   };
 
+  handleNewMovie = () => {};
+
   render() {
     const { length: count } = this.state.movies;
     const { length: genresCount } = this.state.genres;
     const { pageSize, currentPage, selectedGenre, sortColumn } = this.state;
-
+    const { navigation } = this.props;
     if (count == 0) return <p>There are no movies in the database</p>;
 
     const { totalCount, data: movies } = this.getPageData();
@@ -88,7 +91,15 @@ class Movie extends Component {
               onItemSelect={this.handleGenreSelect}
             ></ListGroup>
           </div>
+
           <div className="col-9">
+            <div>
+              {
+                <button className="btn btn-primary" onClick={navigation}>
+                  New Movie
+                </button>
+              }
+            </div>
             <p> Showing {totalCount} movies in the database</p>
             <MoviesTable
               movies={movies}

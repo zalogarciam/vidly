@@ -9,6 +9,7 @@ import MovieForm from "./components/movieForm";
 import LoginForm from "./components/loginForm";
 import "./App.css";
 import RegisterForm from "./components/registerForm";
+import NewMovieForm from "./components/newMovieForm";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginForm></LoginForm>}></Route>
           <Route path="/movies/:id" element={<MovieForm></MovieForm>}></Route>
+          <Route path="/movies/new" element={<NewMovieForm></NewMovieForm>}></Route>
           <Route path="/movies" element={<Movie />}></Route>
           <Route path="/customers" element={<Customer />}></Route>
           <Route path="/rentals" element={<Rental />}></Route>
