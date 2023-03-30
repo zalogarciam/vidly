@@ -8,6 +8,7 @@ import NotFound from "./components/notFound";
 import MovieForm from "./components/movieForm";
 import LoginForm from "./components/loginForm";
 import "./App.css";
+import RegisterForm from "./components/registerForm";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/movies" element={<Movie />}></Route>
           <Route path="/customers" element={<Customer />}></Route>
           <Route path="/rentals" element={<Rental />}></Route>
+          <Route path="/register" element={<RegisterForm />}></Route>
           <Route path="/not-found" element={<NotFound />}></Route>
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Navigate to="/movies" />} />
