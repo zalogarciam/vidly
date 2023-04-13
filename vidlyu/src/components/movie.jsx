@@ -6,7 +6,9 @@ import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
 import _ from "lodash";
 import MoviesTable from "./moviesTable";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Input from "./common/input";
+import SearchBox from "./common/searchBox";
 
 class Movie extends Component {
   state = {
@@ -14,6 +16,8 @@ class Movie extends Component {
     pageSize: 4,
     currentPage: 1,
     genres: [],
+    searchQuery: "",
+    selectedGenre: null,
     sortColumn: { path: "title", order: "asc" },
   };
 
@@ -43,11 +47,15 @@ class Movie extends Component {
   };
 
   handleGenreSelect = (genre) => {
-    this.setState({ selectedGenre: genre, currentPage: 1 });
+    this.setState({ selectedGenre: genre, searchQuery: "", currentPage: 1 });
   };
 
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
+  };
+
+  handleSearch = (query) => {
+    this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
   };
 
   getPageData = () => {
@@ -56,13 +64,17 @@ class Movie extends Component {
       currentPage,
       selectedGenre,
       movies: allMovies,
+      searchQuery,
       sortColumn,
     } = this.state;
 
-    const filtered =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
-        : allMovies;
+    let filtered = allMovies;
+    if (searchQuery)
+      filtered = allMovies.filter((m) =>
+        m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    else if (selectedGenre && selectedGenre._id)
+      filtered = allMovies.filter((m) => m.genre._id === selectedGenre._id);
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const movies = paginate(sorted, currentPage, pageSize);
@@ -70,12 +82,36 @@ class Movie extends Component {
     return { totalCount: filtered.length, data: movies };
   };
 
-  handleNewMovie = () => {};
+  // getPagedData = () => {
+  //   const {
+  //     pageSize,
+  //     currentPage,
+  //     sortColumn,
+  //     selectedGenre,
+  //     searchQuery,
+  //     movies: allMovies,
+  //   } = this.state;
+
+  //   let filtered = allMovies;
+  //   if (searchQuery)
+  //     filtered = allMovies.filter((m) =>
+  //       m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+  //     );
+  //   else if (selectedGenre && selectedGenre._id)
+  //     filtered = allMovies.filter((m) => m.genre._id === selectedGenre._id);
+
+  //   const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+  //   const movies = paginate(sorted, currentPage, pageSize);
+
+  //   return { totalCount: filtered.length, data: movies };
+  // };
 
   render() {
     const { length: count } = this.state.movies;
     const { length: genresCount } = this.state.genres;
-    const { pageSize, currentPage, selectedGenre, sortColumn } = this.state;
+    const { pageSize, currentPage, selectedGenre, sortColumn, searchQuery } =
+      this.state;
     const { navigation } = this.props;
     if (count == 0) return <p>There are no movies in the database</p>;
 
@@ -94,13 +130,19 @@ class Movie extends Component {
 
           <div className="col-9">
             <div>
-              {
-                <button className="btn btn-primary" onClick={navigation}>
-                  New Movie
-                </button>
-              }
+              <Link
+                to="/movies/new"
+                className="btn btn-primary"
+                style={{ marginBottom: 20 }}
+              >
+                New Movie
+              </Link>
             </div>
             <p> Showing {totalCount} movies in the database</p>
+            <SearchBox
+              value={searchQuery}
+              onChange={this.handleSearch}
+            ></SearchBox>
             <MoviesTable
               movies={movies}
               sortColumn={sortColumn}
